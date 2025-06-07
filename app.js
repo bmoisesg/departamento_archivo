@@ -56,3 +56,25 @@ app.post('/archivo', async(req, res) => {
         res.status(500).json({ error: 'Error al conectar a la base de datos' });
     }
 });
+
+app.post('/historial', async(req, res) => {
+    try {
+        let id_archivo = req.body.id_archivo;
+        let id_estado = req.body.id_estado;
+        let fecha = req.body.fecha;
+        let motivo = req.body.motivo;
+
+        const pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('id_archivo', sql.Int, id_archivo)
+            .input('id_estado', sql.Int, id_estado)
+            .input('fecha', sql.NVarChar, fecha)
+            .input('motivo', sql.NVarChar, motivo)
+            .query('EXEC sp_InsertHistorial @id_archivo, @id_estado, @fecha, @motivo');
+
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error en la consulta:', err);
+        res.status(500).json({ error: 'Error al conectar a la base de datos' });
+    }
+});
