@@ -1,15 +1,22 @@
 var express = require('express');
 var morgan = require('morgan');
+const cors = require('cors');
 const sql = require('mssql/msnodesqlv8');
 var app = express();
 require('dotenv').config();
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.listen(8080, function() {
-    console.log('app listening on port 8080!');
+app.listen(process.env.PORT, function() {
+    console.log(`app listening on port ${process.env.PORT}!`);
 });
 
 const config = {
@@ -20,113 +27,20 @@ const config = {
     driver: 'msnodesqlv8'
 };
 
+const historial = require("./models/historial");
+const archivo = require("./models/archivo");
+const tipo = require("./models/tipo");
+const reporte = require("./models/reporte");
+const estadoArchivo = require("./models/estado_archivo");
+
 // Endpoints ----------------------------------------
 
 app.get('/', function(req, res) {
     res.json({ mensaje: "hola mundo melmv" });
 });
 
-app.get('/tipo', async(req, res) => {
-    try {
-        const pool = await sql.connect(config);
-        const result = await pool.request().query('EXEC sp_GetTipo;');
-        res.json(result.recordset);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ error: 'Error al conectar a la base de datos' });
-    }
-});
-
-app.post('/archivo', async(req, res) => {
-    try {
-        let titulo = req.body.titulo;
-        let id_tipo = req.body.id_tipo;
-        let fiscal = req.body.fiscal_ingresa;
-
-        const pool = await sql.connect(config);
-        const result = await pool.request()
-            .input('titulo', sql.NVarChar, titulo)
-            .input('id_tipo', sql.Int, id_tipo)
-            .input('fiscal', sql.Int, fiscal)
-            .query('EXEC sp_InsertArchivo @titulo, @id_tipo, @fiscal');
-
-        res.json(result.recordset);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ error: 'Error al conectar a la base de datos' });
-    }
-});
-
-app.post('/historial', async(req, res) => {
-    try {
-        let id_archivo = req.body.id_archivo;
-        let id_estado = req.body.id_estado;
-        let fecha = req.body.fecha;
-        let motivo = req.body.motivo;
-
-        const pool = await sql.connect(config);
-        const result = await pool.request()
-            .input('id_archivo', sql.Int, id_archivo)
-            .input('id_estado', sql.Int, id_estado)
-            .input('fecha', sql.NVarChar, fecha)
-            .input('motivo', sql.NVarChar, motivo)
-            .query('EXEC sp_InsertHistorial @id_archivo, @id_estado, @fecha, @motivo');
-
-        res.json(result.recordset);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ error: 'Error al conectar a la base de datos' });
-    }
-});
-app.get('/historial/:id', async(req, res) => {
-    try {
-        let id = req.params.id;
-        const pool = await sql.connect(config);
-        const result = await pool.request()
-            .input('id_archivo', sql.Int, id)
-            .query('EXEC sp_historialArchivo @id_archivo');
-        res.json(result.recordset);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ error: 'Error al conectar a la base de datos' });
-    }
-});
-
-
-app.get('/archivo', async(req, res) => {
-    try {
-        const pool = await sql.connect(config);
-        const result = await pool.request().query('EXEC sp_GetArchivos;');
-        res.json(result.recordset);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ error: 'Error al conectar a la base de datos' });
-    }
-});
-
-app.get('/estados_archivo', async(req, res) => {
-    try {
-        const pool = await sql.connect(config);
-        const result = await pool.request().query('EXEC sp_GetEstados;');
-        res.json(result.recordset);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ error: 'Error al conectar a la base de datos' });
-    }
-});
-
-
-app.get('/estado_archivo/:id', async(req, res) => {
-    try {
-        let id = req.params.id;
-        const pool = await sql.connect(config);
-        const result = await pool.request()
-            .input('id_archivo', sql.Int, id)
-            .query('EXEC sp_estadoActualArchivo @id_archivo');
-
-        res.json(result.recordset);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ error: 'Error al conectar a la base de datos' });
-    }
-});
+app.use('/historial', historial);
+app.use('/archivo', archivo);
+app.use('/tipo', tipo);
+app.use('/reporte', reporte);
+app.use('/estado_archivo', estadoArchivo);
