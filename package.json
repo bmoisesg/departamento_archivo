@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "dev": "node app.js"
+        "dev": "node app.js",
+        "test": "jest"
     },
     "author": "",
     "license": "ISC",
@@ -15,5 +16,9 @@
         "morgan": "^1.10.0",
         "msnodesqlv8": "^4.5.0",
         "mssql": "^11.0.1"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0",
+        "supertest": "^7.1.1"
     }
 }
