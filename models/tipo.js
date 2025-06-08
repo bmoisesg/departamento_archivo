@@ -10,6 +10,7 @@ const config = {
     driver: 'msnodesqlv8'
 };
 
+// Listar todos los tipos de que puede ser un archivo
 tipo.get('/', async(req, res) => {
     try {
         const pool = await sql.connect(config);

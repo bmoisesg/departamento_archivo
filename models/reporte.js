@@ -10,7 +10,7 @@ const config = {
     driver: 'msnodesqlv8'
 };
 
-
+// Listar reporte para mostrar el numero de moviemntos que ha tenido todos los archivos
 reporte.get('/1', async(req, res) => {
     try {
         const pool = await sql.connect(config);
@@ -22,6 +22,7 @@ reporte.get('/1', async(req, res) => {
     }
 });
 
+// Listar reporte para msotrar cuantos archivos tiene cada estado de archivo
 reporte.get('/2', async(req, res) => {
     try {
         const pool = await sql.connect(config);

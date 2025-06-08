@@ -10,6 +10,7 @@ const config = {
     driver: 'msnodesqlv8'
 };
 
+// Inseta un registro en el historial, el archivo hizo un movimiento
 historial.post('/', async(req, res) => {
     try {
         let id_archivo = req.body.id_archivo;
@@ -32,6 +33,7 @@ historial.post('/', async(req, res) => {
     }
 });
 
+// Lista el historial de un archivo en base a un id
 historial.get('/:id', async(req, res) => {
     try {
         let id = req.params.id;

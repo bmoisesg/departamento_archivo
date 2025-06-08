@@ -10,6 +10,7 @@ const config = {
     driver: 'msnodesqlv8'
 };
 
+// Listar todos los estados que puede tener un archivo
 estadoArchivo.get('/estado_archivo', async(req, res) => {
     try {
         const pool = await sql.connect(config);
@@ -21,7 +22,7 @@ estadoArchivo.get('/estado_archivo', async(req, res) => {
     }
 });
 
-
+// Consultar el estado de un archivo, necesita el id del archivo
 estadoArchivo.get('/:id', async(req, res) => {
     try {
         let id = req.params.id;

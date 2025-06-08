@@ -10,6 +10,7 @@ const config = {
     driver: 'msnodesqlv8'
 };
 
+// Ingresar un nuevo archivo, solicita titulo, tipo y quien lo crea
 archivo.post('/', async(req, res) => {
     try {
         let titulo = req.body.titulo;
@@ -30,7 +31,7 @@ archivo.post('/', async(req, res) => {
     }
 });
 
-
+// Listar todos los archivos que existen
 archivo.get('/', async(req, res) => {
     try {
         const pool = await sql.connect(config);
