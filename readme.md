@@ -38,3 +38,5 @@ npm run dev
 ## Entidad Relacion
 
 ![Diagrama ER](er.png)
+
+ddl en archivo ddl.sql
