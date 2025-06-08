@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "e7fffe92-1f34-435e-a0bc-b1b925c45780",
+		"name": "departamentoArchivo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "8806394",
+		"_collection_link": "https://interstellar-zodiac-633941.postman.co/workspace/Universidad~6439698c-ec8b-430d-8e20-746ed9ba0b52/collection/8806394-e7fffe92-1f34-435e-a0bc-b1b925c45780?action=share&source=collection_link&creator=8806394"
+	},
+	"item": [
+		{
+			"name": "listar tipo_archivo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/tipo"
+			},
+			"response": []
+		},
+		{
+			"name": "insertar archivo",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"titulo\":\"documento desde postman\",\r\n    \"id_tipo\":1,\r\n    \"fiscal_ingresa\":\"299400565\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/archivo"
+			},
+			"response": []
+		},
+		{
+			"name": "insertar historial",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_archivo\":3,\r\n    \"id_estado\":1,\r\n    \"fecha\":\"2025-04-04 00:00:00\",\r\n    \"motivo\":\"quiero leerlo desde postman\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/historial"
+			},
+			"response": []
+		},
+		{
+			"name": "listar archivos ",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/archivo"
+			},
+			"response": []
+		},
+		{
+			"name": "listar estados",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/estado_archivo"
+			},
+			"response": []
+		},
+		{
+			"name": "estado actual de archivo ",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/estado_archivo/1"
+			},
+			"response": []
+		},
+		{
+			"name": "listar historial de archivo ",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/historial/4"
+			},
+			"response": []
+		},
+		{
+			"name": "reporte 1, mas movimientos",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/reporte/1"
+			},
+			"response": []
+		},
+		{
+			"name": "reporte2 contador archivos con estados",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/reporte/2"
+			},
+			"response": []
+		}
+	]
+}
