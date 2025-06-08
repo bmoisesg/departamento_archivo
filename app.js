@@ -1,8 +1,15 @@
 var express = require('express');
 var morgan = require('morgan');
+const cors = require('cors');
 const sql = require('mssql/msnodesqlv8');
 var app = express();
 require('dotenv').config();
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(morgan('dev'))
 app.use(express.json())
@@ -47,7 +54,7 @@ app.post('/archivo', async(req, res) => {
         const result = await pool.request()
             .input('titulo', sql.NVarChar, titulo)
             .input('id_tipo', sql.Int, id_tipo)
-            .input('fiscal', sql.Int, fiscal)
+            .input('fiscal', sql.NVarChar, fiscal)
             .query('EXEC sp_InsertArchivo @titulo, @id_tipo, @fiscal');
 
         res.json(result.recordset);
@@ -68,9 +75,9 @@ app.post('/historial', async(req, res) => {
         const result = await pool.request()
             .input('id_archivo', sql.Int, id_archivo)
             .input('id_estado', sql.Int, id_estado)
-            .input('fecha', sql.NVarChar, fecha)
-            .input('motivo', sql.NVarChar, motivo)
-            .query('EXEC sp_InsertHistorial @id_archivo, @id_estado, @fecha, @motivo');
+
+        .input('motivo', sql.NVarChar, motivo)
+            .query('EXEC sp_InsertHistorial @id_archivo, @id_estado, @motivo');
 
         res.json(result.recordset);
     } catch (err) {
@@ -124,6 +131,28 @@ app.get('/estado_archivo/:id', async(req, res) => {
             .input('id_archivo', sql.Int, id)
             .query('EXEC sp_estadoActualArchivo @id_archivo');
 
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error en la consulta:', err);
+        res.status(500).json({ error: 'Error al conectar a la base de datos' });
+    }
+});
+
+app.get('/reporte1', async(req, res) => {
+    try {
+        const pool = await sql.connect(config);
+        const result = await pool.request().query('EXEC sp_reporte1;');
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error en la consulta:', err);
+        res.status(500).json({ error: 'Error al conectar a la base de datos' });
+    }
+});
+
+app.get('/reporte2', async(req, res) => {
+    try {
+        const pool = await sql.connect(config);
+        const result = await pool.request().query('EXEC sp_reporte2;');
         res.json(result.recordset);
     } catch (err) {
         console.error('Error en la consulta:', err);
